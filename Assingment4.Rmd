@@ -45,8 +45,55 @@ pressure_clean <- lobster_pressure %>%
 pressure_clean
 
 
+
 ```
 
+
+Part 1: Lobster abundance and fishing pressure
+- Exploratory data analysis
+    - Data frame and scatter plots with 5 locations with counts and fishing pressure (traps) for 2012-2017 (separately)
+    - Finalized data summary table for counts/traps at each of the locations by year *** Need to do this
+    - Finalized Histogram for each location with count/fishing pressure *** Need to do this
+    - Finalized QQ-Plots for each location  *** Need to do this
+    
+```{r}
+
+abundance <- size_clean %>% 
+  select(YEAR, SITE, COUNT) %>% 
+  group_by(SITE, YEAR) %>% 
+  summarize (
+      total_count = round(sum(COUNT), digits = 1)
+    ) %>% 
+  ggplot(aes(x=YEAR, y = total_count))+
+  geom_point() +
+  facet_wrap(~SITE, scale = "free") +
+  xlab("Year") +
+  ylab("Total Count")
+    
+
+abundance
+
+
+
+
+pressure <- pressure_clean %>% 
+  select(YEAR, SITE, TRAPS) %>%
+  filter(SITE == "AQUE"| SITE == "NAPL" | SITE == "MOHK"| SITE == "IVEE"| SITE == "CARP") %>% 
+  group_by(SITE, YEAR) %>% 
+  summarize (
+      total_traps = round(sum(TRAPS), digits = 1)
+    ) %>% 
+  ggplot(aes(x=YEAR, y = total_traps))+
+  geom_point() +
+  facet_wrap(~SITE, scale = "free") +
+  xlab("Year") +
+  ylab("Total Traps")
+
+pressure
+ 
+
+
+```
 
 
 
