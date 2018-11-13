@@ -1,0 +1,54 @@
+---
+title: "206 Assignment 4"
+author: "Sidney Gerst"
+date: "November 13, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load Packages and read in files
+
+```{r}
+library(tidyverse)
+library(pwr)
+library(knitr)
+library(kableExtra)
+library(plotly)
+library(ggrepel)
+library(effsize)
+library(vcdExtra)
+library(dplyr)
+
+lobster_pressure <- read_csv("lobster_traps.csv")
+
+lobster_size <- read_csv("lobster_size_abundance.csv")
+
+
+
+```
+
+Clean up Data before converting to tidy
+
+```{r}
+size_clean <- lobster_size %>%
+  select(YEAR, SITE, SIZE, COUNT) %>%
+  filter(COUNT != "0")
+
+size_clean
+
+pressure_clean <- lobster_pressure %>%
+  select(YEAR, SITE, TRAPS) 
+  
+pressure_clean
+
+
+```
+
+
+
+
+
+
