@@ -58,6 +58,7 @@ Part 1: Lobster abundance and fishing pressure
     
 ```{r}
 
+# Make scatter plot for MEAN annual abundance by site (2012-2017)
 abundance <- size_clean %>% 
   select(YEAR, SITE, COUNT) %>% 
   group_by(SITE, YEAR) %>% 
@@ -69,21 +70,38 @@ abundance <- size_clean %>%
   facet_wrap(~SITE, scale = "free") +
   xlab("Year") +
   ylab("Total Count")
-    
 
 abundance
 
+
+# Make column graph of total abundance by site (2012-2017)
 abundance_col <- ggplot(size_clean, aes(x = YEAR, y = COUNT))+
   geom_col()+
   facet_wrap(~SITE, scale = "free")
 
 abundance_col
 
+
+# Make line graph of total abundance within each site (2012-2017)
+abundance_line <- as.data.frame(size_clean) %>% 
+  expand.dft(freq="COUNT") %>% 
+  count(YEAR, SITE) %>% 
+  ggplot(aes(x=YEAR, y = n))+
+  geom_line(aes(color=SITE)) +
+  xlab("Year") +
+  ylab("Total Count")
+
+abundance_line
+
+
+
 ```
 
 
 
 ```{r}
+
+# Make a scatter plot for MEAN annual lobster pressure for each site (2012-2017)
 pressure <- pressure_clean %>% 
   select(YEAR, SITE, TRAPS) %>%
   filter(SITE == "AQUE"| SITE == "NAPL" | SITE == "MOHK"| SITE == "IVEE"| SITE == "CARP") %>% 
@@ -95,11 +113,35 @@ pressure <- pressure_clean %>%
   geom_point() +
   facet_wrap(~SITE, scale = "free") +
   xlab("Year") +
-  ylab("Total Traps")
+  ylab("Total Traps")+
+  ggtitle("Lobster Abundance between 2012 and 2017")+
+  theme_classic()
 
 pressure
  
+
+# Make a column graph for total pressure for each site (2012-2017)
 pressure_col <- ggplot(pressure_clean, aes(x = YEAR, y = TRAPS))+
+  geom_col()+
+  facet_wrap(~SITE, scale = "free")
+
+pressure_col
+
+# Make line graph of total pressure within each site (2012-2017)
+pressure_line <- as.data.frame(pressure_clean) %>% 
+  expand.dft(freq="TRAPS") %>% 
+  count(YEAR, SITE) %>% 
+  ggplot(aes(x=YEAR, y = n))+
+  geom_line(aes(color=SITE)) +
+  xlab("Year") +
+  ylab("Total Pressure")+
+  ggtitle("Lobster Pressure between 2012 and 2017")+
+  theme_classic()
+
+pressure_line
+
+
+
 ```
 
 
