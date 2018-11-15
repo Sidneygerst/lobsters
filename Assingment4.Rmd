@@ -73,9 +73,17 @@ abundance <- size_clean %>%
 
 abundance
 
+abundance_col <- ggplot(size_clean, aes(x = YEAR, y = COUNT))+
+  geom_col()+
+  facet_wrap(~SITE, scale = "free")
+
+abundance_col
+
+```
 
 
 
+```{r}
 pressure <- pressure_clean %>% 
   select(YEAR, SITE, TRAPS) %>%
   filter(SITE == "AQUE"| SITE == "NAPL" | SITE == "MOHK"| SITE == "IVEE"| SITE == "CARP") %>% 
@@ -91,11 +99,7 @@ pressure <- pressure_clean %>%
 
 pressure
  
-
-
+pressure_col <- ggplot(pressure_clean, aes(x = YEAR, y = TRAPS))+
 ```
-
-**
-
 
 
