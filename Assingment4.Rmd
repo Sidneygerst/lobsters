@@ -55,7 +55,10 @@ Part 1: Lobster abundance and fishing pressure
     - Finalized data summary table for counts/traps at each of the locations by year *** Need to do this
     - Finalized Histogram for each location with count/fishing pressure *** Need to do this
     - Finalized QQ-Plots for each location  *** Need to do this
+    - Finalized line graphs for abundance and pressure 
     
+    
+
 ```{r}
 
 # Make scatter plot for MEAN annual abundance by site (2012-2017)
@@ -89,7 +92,9 @@ abundance_line <- as.data.frame(size_clean) %>%
   ggplot(aes(x=YEAR, y = n))+
   geom_line(aes(color=SITE)) +
   xlab("Year") +
-  ylab("Total Count")
+  ylab("Total Count")+
+  ggtitle("Lobster Abundance at Long-Term Ecological Research Sites in the Santa Barbara Channel")+
+  theme_classic()
 
 abundance_line
 
@@ -135,13 +140,29 @@ pressure_line <- as.data.frame(pressure_clean) %>%
   geom_line(aes(color=SITE)) +
   xlab("Year") +
   ylab("Total Pressure")+
-  ggtitle("Lobster Pressure between 2012 and 2017")+
+  ggtitle("Lobster Pressure at Long-Term Ecological Research Sites in Santa Barbara Channel")+
   theme_classic()
 
 pressure_line
 
-
-
 ```
 
+
+
+
+Part 2. Compare mean lobster size by site in 2017
+
+- Convert to tidy format
+- Exploratory data analysis 
+```{r}
+
+# Convert abundance and pressure data frames into tidy format
+
+abundance_tidy <- as.data.frame(size_clean) %>% 
+  expand.dft(freq="COUNT")
+
+pressure_tidy <- as.data.frame(pressure_clean) %>% 
+  expand.dft(freq="TRAPS") 
+
+```
 
