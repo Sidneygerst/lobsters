@@ -505,9 +505,67 @@ Non_MPA_qq_year
 ### 2. HYPOTHESIS TESTING 
 ##########################
 
-#Hypothesis test for size change in MPA sites during 2012 and 2017
-  ## Null Hypothesis -- there is no significant difference in carapace length (2012 and 2017)
-  ## Alternative Hypothesis -- there IS a significant difference in carapace length (2012 and             2017)
+## Is there a significant difference in mean carapace length between 2012 and 2017 at MPA sites?
+
+# Two Sample Hypothesis test for size change in MPA sites during 2012 and 2017
+  ## Null Hypothesis -- there is no significant difference in carapace length between 2012 and 2017
+  ## Alternative Hypothesis -- there IS a significant difference in carapace length between 2012 and      2017
+
+MPA_sites_2012 <- MPA_sites %>% 
+  filter(STATUS == "MPA") %>% 
+  filter(YEAR == "2012")
+
+MPA_sites_2017 <- MPA_sites %>% 
+  filter(STATUS == "MPA") %>% 
+  filter(YEAR == "2017")
+
+
+MPA_ttest <- t.test(MPA_sites_2012$SIZE, MPA_sites_2017$SIZE)
+
+MPA_ttest ## p-value = 0.03603 -- below 0.05 so we will reject the null hypothesis and we conclude that there IS a significant difference in length between 2012 and 2017 at MPA sites. 
+
+#################
+
+## Is there a significant difference in mean carapace length between 2012 and 2017 and NON MPA sites?
+
+# Two Sample Hypothesis test for size change in NON - MPA sites during 2012 and 2017
+  ## Null Hypothesis -- there is no significant difference in carapace length between 2012 and 2017
+  ## Alternative Hypothesis -- there IS a significant difference in carapace length between 2012 and      2017
+
+Non_MPA_sites_2012 <- MPA_sites %>% 
+  filter(STATUS == "Non-MPA") %>% 
+  filter(YEAR == "2012")
+
+Non_MPA_sites_2017 <- MPA_sites %>%
+  filter(STATUS == "Non-MPA") %>%
+  filter(YEAR == "2017")
+
+Non_MPA_ttest <- t.test(Non_MPA_sites_2012$SIZE, Non_MPA_sites_2017$SIZE)
+
+Non_MPA_ttest # p-value = 0.007228 -  again, below 0.05 so we will reject the null hypothesis and we conclude that there IS a significant differene in length between 2012 and 2017 at NON MPA sites.
+
+
+################
+
+## Is there a significant difference in mean carapace length between MPA and Non-MPA sites in 2012? 
+
+# Two Sample Hypothesis test for size difference between MPA and NON MPA sites during 2012 
+  ## Null Hypothesis -- there is no significant difference in carapace length between MPA and Non-MPA   sites in 2012
+  ## Alternative Hypothesis -- there IS a significant difference in carapace length between MPA sites   and Non-MPA sites in 2012
+
+MPA_vs_NonMPA_2012 <- t.test(MPA_sites_2012$SIZE, Non_MPA_sites_2012$SIZE)
+MPA_vs_NonMPA_2012 # p-vale = 0.002263 -- less than 0.05 so we reject the null and conclude that there IS a significant difference in carapace length between MPA and Non-MPA sites in 2012. 
+
+
+## Is there a significant difference in mean carapace length between MPA and Non-MPA sites in 2017?
+
+MPA_vs_NonMPA_2017 <- t.test(MPA_sites_2017$SIZE, Non_MPA_sites_2017$SIZE)
+MPA_vs_NonMPA_2017 # p-value = 0.8721 -- not less than 0.05 so we will RETAIN the null and conclude that there IS NOT a significant difference in carapace length between MPA and Non-MPA sites in 2017.
+
+
+
+
+
  
 ```
 
