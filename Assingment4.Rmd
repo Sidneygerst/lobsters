@@ -3,9 +3,7 @@ title: "206 Assignment 4"
 author: "Sidney Gerst"
 date: "November 13, 2018"
 output:
-  word_document: default
   html_document: default
-  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -205,6 +203,7 @@ size_qq
 box_size <- ggplot(sizes_2017, aes(x = SITE, y = SIZE)) +
   geom_boxplot(width = .4, aes(color = SITE))
   
+ 
 
 box_size
 
