@@ -621,7 +621,7 @@ sizes_17_chi
 ##Hypothesis Test
 #H0: There is no signifigant asscociation between legal carapace size across the five sites.
 #HA: There is a signifigant asscociation between legal carapace size across the five sites. 
-
+ 
 #X^2 = 0.9995
 
 
