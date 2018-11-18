@@ -171,13 +171,16 @@ Part 2. Compare mean lobster size by site in 2017
 - Exploratory data analysis 
 ```{r}
 
-# Convert abundance and pressure data frames into tidy format
+# Convert abundance data frame into tidy format
 
 abundance_tidy <- as.data.frame(size_clean) %>% 
   expand.dft(freq="COUNT")
 
-pressure_tidy <- as.data.frame(pressure_clean) %>% 
-  expand.dft(freq="TRAPS") 
+abundance_tidy
+
+#Create data frame for our 5 locations in 2017, selecting size.
+size_means <- abundance_tidy %>% 
+  
 
 ```
 
