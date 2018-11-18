@@ -315,3 +315,55 @@ Non_MPA_size_table
  
 ```
 
+
+Part 4. Proportions of “legal” lobsters at the 5 sites in 2017
+
+The legal minimum carapace size for lobster is 82.6 mm. What proportion of observed lobsters at each site are above the legal minimum? Does that proportion differ significantly across the 5 sites?
+
+Steps for chi-square test:
+  -Create table of proportions for carapace size in 2017 for the 5 sites
+  -Chi-square test
+
+```{r}
+#table of proportions using the df: sizes_2017
+sizes_17 <- sizes_2017 %>% 
+  filter( YEAR == "2017") %>% 
+  mutate(PROTECTED = case_when(
+    SITE == "IVEE" ~ "MPA",
+    SITE == "NAPL" ~ "MPA",
+    SITE == "AQUE" ~ "Non-MPA",
+    SITE == "CARP" ~ "Non-MPA",
+    SITE == "MOHK" ~ "Non-MPA"))
+
+sizes_17
+
+sizes_17_summary <- sizes_2017 %>% 
+  filter(YEAR == "2017") %>% 
+  mutate(PROTECTED = case_when(
+    SITE == "IVEE" ~ "MPA",
+    SITE == "NAPL" ~ "MPA",
+    SITE == "AQUE" ~ "Non-MPA",
+    SITE == "CARP" ~ "Non-MPA",
+    SITE == "MOHK" ~ "Non-MPA")) %>% 
+  filter(SIZE > 82.6) %>% 
+  group_by(SITE) %>% 
+  summarize(
+    LEGAL_LOBSTARS = round(mean(SIZE),2) 
+  )
+
+sizes_17_summary
+
+sizes_17_table <- sizes_17_summary %>%
+  kable(align = "c", col.names = c("Site", "Percentage")) %>%
+  kable_styling(bootstrap_options = c("striped", "consensed"), full_width = F) %>%
+  add_header_above(c("Proportion of Legal Lobsters Across Sites in 2017" = 2))
+
+sizes_17_table
+
+#chi-square test to compare the proportions across the five sites
+sizes_17_chi <- chisq.test(sizes_17_summary$LEGAL_LOBSTARS)
+sizes_17_chi
+
+
+```
+
