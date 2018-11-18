@@ -210,25 +210,28 @@ box_
 
 
 Part 3. Changes in lobster size at MPA and non-MPA sites (comparing only 2012 and 2017 sizes)
-  - Exploratory data analysis
-      - Summary data table with size means within MPA sites during 2012 and 2017
-      - Summary data table with size within non-MPA sites during 2012 and 2017
-  - Hypothesis test for size change in MPA sites during 2012 and 2017
-      - Null Hypothesis -- there is no significant difference in carapace length (2012 and 2017)
-      - Alternative Hypothesis -- there IS a significant difference in carapace length (2012 and             2017)
-  - Hypothesis test for size change in non-MPA sites during 2012 and 2017
-      - Null Hypothesis -- there is no significant difference in carapace length between 2012 and            2017
-      - Alternative Hypothesis -- there IS a significant difference in carapace length (2012-2017)
-  - Hypothesis test to compare carapace length between MPA sites and non-MPA sites during 2012 (and      separately 2017)
-      - Null Hypothesis -- there is no significant difference in carapace length of lobsters in MPA          sites and non-MPA sites
-      - Alternative Hypothesis -- there IS no significant difference in carapace length of lobsters          in MPA sites and non-MPA sites
+  - 1.  Exploratory data analysis
+        - Summary data table with size means within MPA sites during 2012 and 2017
+        - Summary data table with size within non-MPA sites during 2012 and 2017
+        - Histograms and QQplots for MPA and Non-MPA sites (2012-2017)
+  - 2. Hypothesis test for size change in MPA sites during 2012 and 2017
+        - Null Hypothesis -- there is no significant difference in carapace length (2012 and 2017)
+        - Alternative Hypothesis -- there IS a significant difference in carapace length (2012 and             2017)
+  - 3. Hypothesis test for size change in non-MPA sites during 2012 and 2017
+        - Null Hypothesis -- there is no significant difference in carapace length between 2012 and            2017
+        - Alternative Hypothesis -- there IS a significant difference in carapace length (2012-2017)
+  - 4. Hypothesis test to compare carapace length between MPA sites and non-MPA sites during 2012           (and separately 2017)
+        - Null Hypothesis -- there is no significant difference in carapace length of lobsters in MPA          sites and non-MPA sites
+        - Alternative Hypothesis -- there IS no significant difference in carapace length of lobsters          in MPA sites and non-MPA sites
       
 ```{r}
 
-### EXPLORATORY DATA ANALYSIS
+################################
+### 1. EXPLORATORY DATA ANALYSIS
+################################
+
 
 ## Set up data frame that assigns MPA or non-MPA designation
-
 MPA_sites <- abundance_tidy %>% 
   filter(YEAR == "2012" | YEAR == "2017") %>% 
   mutate(
@@ -240,9 +243,7 @@ MPA_sites <- abundance_tidy %>%
       SITE == "CARP" ~ "Non-MPA")) %>% 
   select(YEAR, SITE, SIZE, STATUS)
 
-
 ## Create summary data table for MPA sites with mean, median, max, SD, sample size for SIZE at each site for 2012 and 2017  (IVEE, NAPL)
-
 MPA_size_table <- MPA_sites %>% 
   filter(STATUS == "MPA") %>% 
   group_by(YEAR) %>% 
@@ -255,7 +256,6 @@ MPA_size_table <- MPA_sites %>%
   )
 
 MPA_size_table
-
 
 ## Create summary data table for NON-MPA sites with mean, median, max, SD, sample size for SIZE at each site for 2012 and 2017 (AQUE, MOHK, CARP)
 Non_MPA_size_table <- MPA_sites %>% 
@@ -270,8 +270,205 @@ Non_MPA_size_table <- MPA_sites %>%
   )
 
 Non_MPA_size_table
-      
 
+
+#########################
+# MPA Sites Data Analysis
+#########################
+
+
+## Create finalized histogram for MPA sites during 2012
+MPA_hist_2012 <- MPA_sites %>% 
+  filter(STATUS == "MPA") %>%
+  filter(YEAR == "2012") %>% 
+  ggplot(aes(x=SIZE))+
+  geom_histogram(bins = 11, boundary= 0, colour="white", fill= "deepskyblue4")+
+  facet_wrap(~SITE, scale = "free")+
+  xlab("Carapace Length(mm)")+
+  ylab("Abundance")+
+  ggtitle("Lobster Sizes at MPA Sites during 2012 - TH, EM, SG")+
+  scale_y_continuous(expand = c(0,0))+
+  scale_x_continuous(expand = c(0,0))+
+  theme_classic()
+
+MPA_hist_2012
+
+## Create qqplot for MPA sites during 2012
+
+MPA_qq_2012 <- MPA_sites %>% 
+  filter(STATUS == "MPA") %>%
+  filter(YEAR == "2012") %>% 
+  ggplot(aes(sample=SIZE))+
+  geom_qq()+
+  facet_wrap(~SITE, scale = "free")+
+  ylab("Carapace Length(mm)")+
+  ggtitle("Lobster Sizes at MPA Sites during 2012 - TH, EM, SG")+
+  theme_classic()
+
+MPA_qq_2012
+
+
+## Create finalzied histogram for MPA sites during 2017
+MPA_hist_2017 <- MPA_sites %>% 
+  filter(STATUS == "MPA") %>%
+  filter(YEAR == "2017") %>% 
+  ggplot(aes(x=SIZE))+
+  geom_histogram(bins = 11, boundary= 0, colour="white", fill= "deepskyblue4")+
+  facet_wrap(~SITE, scale = "free")+
+  xlab("Carapace Length(mm)")+
+  ylab("Abundance")+
+  ggtitle("Lobster Sizes at MPA Sites during 2017 - TH, EM, SG")+
+  scale_y_continuous(expand = c(0,0))+
+  scale_x_continuous(expand = c(0,0))+
+  theme_classic()
+      
+MPA_hist_2017
+
+
+## Create qqplot for MPA sites during 2017
+MPA_qq_2017 <- MPA_sites %>% 
+  filter(STATUS == "MPA") %>%
+  filter(YEAR == "2017") %>% 
+  ggplot(aes(sample=SIZE))+
+  geom_qq()+
+  facet_wrap(~SITE, scale = "free")+
+  ylab("Carapace Length(mm)")+
+  ggtitle("Lobster Sizes at MPA Sites during 2017 - TH, EM, SG")+
+  theme_classic()
+
+MPA_qq_2017
+
+
+## Create finalized histogram for MPA sites grouped by YEAR
+MPA_hist_year <- MPA_sites %>% 
+  filter(STATUS == "MPA") %>%
+  ggplot(aes(x=SIZE))+
+  geom_histogram(bins = 13, boundary= 0, colour="white", fill= "deepskyblue4")+
+  facet_wrap(~YEAR, scale = "free")+
+  xlab("Carapace Length(mm)")+
+  ylab("Abundance")+
+  ggtitle("Lobster Sizes at MPA Sites during 2012 and 2017 - TH, EM, SG")+
+  scale_y_continuous(expand = c(0,0))+
+  scale_x_continuous(expand = c(0,0))+
+  theme_classic()
+
+MPA_hist_year
+
+## Create qqplot for MPA sites grouped by YEAR
+MPA_qq_year <- MPA_sites %>% 
+  filter(STATUS == "MPA") %>%
+  ggplot(aes(sample=SIZE))+
+  geom_qq()+
+  facet_wrap(~YEAR, scale = "free")+
+  ylab("Carapace Length(mm)")+
+  ggtitle("Lobster Sizes at MPA Sites during 2012 and 2017 - TH, EM, SG")+
+  theme_classic()
+
+MPA_qq_year
+
+
+##############################
+# NON - MPA Sites Data Analysis
+##############################
+
+## Create finalized histogram for NON - MPA sites during 2012
+Non_MPA_hist_2012 <- MPA_sites %>% 
+  filter(STATUS == "Non-MPA") %>%
+  filter(YEAR == "2012") %>% 
+  ggplot(aes(x=SIZE))+
+  geom_histogram(bins = 11, boundary= 0, colour="white", fill= "deepskyblue4")+
+  facet_wrap(~SITE, scale = "free")+
+  xlab("Carapace Length(mm)")+
+  ylab("Abundance")+
+  ggtitle("Lobster Sizes at Non-MPA Sites during 2012 - TH, EM, SG")+
+  scale_y_continuous(expand = c(0,0))+
+  scale_x_continuous(expand = c(0,0))+
+  theme_classic()
+
+Non_MPA_hist_2012
+
+## Create qqplot for MPA sites during 2012
+
+Non_MPA_qq_2012 <- MPA_sites %>% 
+  filter(STATUS == "Non-MPA") %>%
+  filter(YEAR == "2012") %>% 
+  ggplot(aes(sample=SIZE))+
+  geom_qq()+
+  facet_wrap(~SITE, scale = "free")+
+  ylab("Carapace Length(mm)")+
+  ggtitle("Lobster Sizes at Non-MPA Sites during 2012 - TH, EM, SG")+
+  theme_classic()
+
+Non_MPA_qq_2012
+
+
+## Create finalzied histogram for NON - MPA sites during 2017
+Non_MPA_hist_2017 <- MPA_sites %>% 
+  filter(STATUS == "Non-MPA") %>%
+  filter(YEAR == "2017") %>% 
+  ggplot(aes(x=SIZE))+
+  geom_histogram(bins = 11, boundary= 0, colour="white", fill= "deepskyblue4")+
+  facet_wrap(~SITE, scale = "free")+
+  xlab("Carapace Length(mm)")+
+  ylab("Abundance")+
+  ggtitle("Lobster Sizes at Non-MPA Sites during 2017 - TH, EM, SG")+
+  scale_y_continuous(expand = c(0,0))+
+  scale_x_continuous(expand = c(0,0))+
+  theme_classic()
+      
+Non_MPA_hist_2017
+
+
+## Create qqplot for NON - MPA sites during 2017
+Non_MPA_qq_2017 <- MPA_sites %>% 
+  filter(STATUS == "Non-MPA") %>%
+  filter(YEAR == "2017") %>% 
+  ggplot(aes(sample=SIZE))+
+  geom_qq()+
+  facet_wrap(~SITE, scale = "free")+
+  ylab("Carapace Length(mm)")+
+  ggtitle("Lobster Sizes at Non-MPA Sites during 2017 - TH, EM, SG")+
+  theme_classic()
+
+Non_MPA_qq_2017
+
+
+## Create finalized histogram for NON - MPA sites grouped by YEAR
+Non_MPA_hist_year <- MPA_sites %>% 
+  filter(STATUS == "Non-MPA") %>%
+  ggplot(aes(x=SIZE))+
+  geom_histogram(bins = 13, boundary= 0, colour="white", fill= "deepskyblue4")+
+  facet_wrap(~YEAR, scale = "free")+
+  xlab("Carapace Length(mm)")+
+  ylab("Abundance")+
+  ggtitle("Lobster Sizes at Non-MPA Sites during 2012 and 2017 - TH, EM, SG")+
+  scale_y_continuous(expand = c(0,0))+
+  scale_x_continuous(expand = c(0,0))+
+  theme_classic()
+
+Non_MPA_hist_year
+
+## Create qqplot for NON - MPA sites grouped by YEAR
+Non_MPA_qq_year <- MPA_sites %>% 
+  filter(STATUS == "Non-MPA") %>%
+  ggplot(aes(sample=SIZE))+
+  geom_qq()+
+  facet_wrap(~YEAR, scale = "free")+
+  ylab("Carapace Length(mm)")+
+  ggtitle("Lobster Sizes at Non-MPA Sites during 2012 and 2017 - TH, EM, SG")+
+  theme_classic()
+
+Non_MPA_qq_year
+
+
+
+##########################
+### 2. HYPOTHESIS TESTING 
+##########################
+
+#Hypothesis test for size change in MPA sites during 2012 and 2017
+  ## Null Hypothesis -- there is no significant difference in carapace length (2012 and 2017)
+  ## Alternative Hypothesis -- there IS a significant difference in carapace length (2012 and             2017)
  
 ```
 
