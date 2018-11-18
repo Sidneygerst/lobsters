@@ -53,16 +53,14 @@ pressure_clean
 
 Part 1: Lobster abundance and fishing pressure
 - Exploratory data analysis
-    - Data frame and scatter plots with 5 locations with counts and fishing pressure (traps) for 2012-2017 (separately)
-    - Finalized data summary table for counts/traps at each of the locations by year *** Need to do this
-    - Finalized Histogram for each location with count/fishing pressure *** Need to do this
-    - Finalized QQ-Plots for each location  *** Need to do this
-    - Finalized line graphs for abundance and pressure 
+    - Scatter plots with 5 locations with counts and fishing pressure (traps) for 2012-2017 (separately)
+    - Column graphs with total count/traps by site
+    - Finalized line graphs for abundance and pressure
     
     
 ```{r, echo=FALSE, message=FALSE}
 
-# Make scatter plot for MEAN annual abundance by site (2012-2017)
+## Make scatter plot for annual abundance by site (2012-2017)
 abundance <- size_clean %>% 
   select(YEAR, SITE, COUNT) %>% 
   group_by(SITE, YEAR) %>% 
@@ -73,23 +71,25 @@ abundance <- size_clean %>%
   geom_point() +
   facet_wrap(~SITE, scale = "free") +
   xlab("Year") +
-  ylab("Mean Count")+
-  theme_classic()
+  ylab("Total Count")+
+  theme_classic()+
+  ggtitle("Total Lobster Abundance (2012-2017) - TH, EM, SG")
   
 
 abundance
 
 
-# Make column graph of total abundance by site (2012-2017)
+## Make column graph of total abundance by site (2012-2017)
 abundance_col <- ggplot(size_clean, aes(x = YEAR, y = COUNT))+
   geom_col()+
   facet_wrap(~SITE, scale = "free")+
-  theme_classic()
+  theme_classic()+
+  ggtitle("Total Lobster Abundance (2012-2017) - TH, EM, SG")
 
 abundance_col
 
 
-# Make line graph of total abundance within each site (2012-2017)
+## Make line graph of total abundance within each site (2012-2017)
 abundance_line <- as.data.frame(size_clean) %>% 
   expand.dft(freq="COUNT") %>% 
   count(YEAR, SITE) %>% 
@@ -97,13 +97,11 @@ abundance_line <- as.data.frame(size_clean) %>%
   geom_line(aes(color=SITE)) +
   xlab("Year") +
   ylab("Total Count")+
-  ggtitle("Lobster Abundance at LTER Sites in the Santa Barbara Channel")+
-  theme_classic()
+  ggtitle("Lobster Abundance at LTER Sites in the Santa Barbara Channel - TH, EM, SG")+
+  theme_classic()+
+  
 
 abundance_line
-
-# Make finalized data summary table for lobseter abundance (2012-2017) 
-
 
 
 ```
@@ -112,7 +110,7 @@ abundance_line
 
 ```{r, echo=FALSE, message=FALSE}
 
-# Make a scatter plot for MEAN annual lobster pressure for each site (2012-2017)
+# Make a scatter plot for annual lobster pressure for each site (2012-2017)
 pressure <- pressure_clean %>% 
   select(YEAR, SITE, TRAPS) %>%
   filter(SITE == "AQUE"| SITE == "NAPL" | SITE == "MOHK"| SITE == "IVEE"| SITE == "CARP") %>% 
@@ -124,36 +122,42 @@ pressure <- pressure_clean %>%
   geom_point() +
   facet_wrap(~SITE, scale = "free") +
   xlab("Year") +
-  ylab("Mean Pressure")+
-  ggtitle("Lobster Abundance between 2012 and 2017")+
+  ylab("Total Pressure")+
+  ggtitle("Lobster Abundance (2012-2017) - TH, EM, SG")+
   theme_classic()
 
 pressure
+
+
+# Make final pressure data frame (with just 5 sites)
+pressure_final <- pressure_clean %>% 
+  select(YEAR, SITE, TRAPS) %>%
+  filter(SITE == "AQUE"| SITE == "NAPL" | SITE == "MOHK"| SITE == "IVEE"| SITE == "CARP")
  
 
 # Make a column graph for total pressure for each site (2012-2017)
-pressure_col <- ggplot(pressure_clean, aes(x = YEAR, y = TRAPS))+
+pressure_col <- ggplot(pressure_final, aes(x = YEAR, y = TRAPS))+
   geom_col()+
-  facet_wrap(~SITE, scale = "free")
+  facet_wrap(~SITE, scale = "free")+
+  theme_classic()+
+  ggtitle("Total Lobster Fishing Pressure (2012-2017) - TH, EM, SG")
 
 pressure_col
 
 
 # Make line graph of total pressure within each site (2012-2017)
-pressure_line <- as.data.frame(pressure_clean) %>% 
+pressure_line <- as.data.frame(pressure_final) %>% 
   expand.dft(freq="TRAPS") %>% 
   count(YEAR, SITE) %>% 
   ggplot(aes(x=YEAR, y = n))+
   geom_line(aes(color=SITE)) +
   xlab("Year") +
   ylab("Total Pressure")+
-  ggtitle("Lobster Pressure at LTER Sites in Santa Barbara Channel")+
+  ggtitle("Lobster Fishing Pressure at LTER Sites in Santa Barbara Channel - TH, EM, SG")+
   theme_classic()
 
 pressure_line
 
-
-# Make a finalized data summary table for lobster pressure by site (2012-2017)
 
 
 ```
