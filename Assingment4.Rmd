@@ -165,6 +165,7 @@ Discuss trends in lobster abundance (counts) and fishing pressure (buoys):
 - In each of the five sites, the total lobster abundance is greater in 2017 than it was in 2012. However, counts vary greatly over the 5 years. At the AQUE site, counts were much greater over the course of all 5 years than at the other sites. CARP had a dramatic increase in 2017, whereas prior to that the counts were very low. AQUE, CARP, and IVEE all ended 2017 with counts higher than the previous year, while the other two sites, MOHK and NAPL, experienced decline in their final year. An analysis of lobster pressure may partially explain trends in lobster abundance. Within the AQUE, MOHK, and CARP sites there was a decline in lobster fishing pressure between 2016 and 2017. This could have caused the significant increase in lobster abundance seen at the CARP site within the same time frame. In general, lobster fishing pressure decreased between 2012 and 2017 at CARP, MOH, and AQUE. NAPL and IVEE are Marine Protected Areas (MPA's) and so have zero fishing pressure. 
 
 
+
 Part 2. Compare mean lobster size by site in 2017
 
 - Convert to tidy format
