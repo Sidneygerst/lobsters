@@ -578,54 +578,43 @@ Steps for chi-square test:
   -Create table of proportions for carapace size in 2017 for the 5 sites
   -Chi-square test
 
-```{r echo = false}
+```{r echo = FALSE}
 #table of proportions using the df: sizes_2017
-sizes_17 <- sizes_2017 %>% 
-  filter( YEAR == "2017") %>% 
-  mutate(PROTECTED = case_when(
-    SITE == "IVEE" ~ "MPA",
-    SITE == "NAPL" ~ "MPA",
-    SITE == "AQUE" ~ "Non-MPA",
-    SITE == "CARP" ~ "Non-MPA",
-    SITE == "MOHK" ~ "Non-MPA"))
 
-sizes_17
 
-sizes_17_summary <- sizes_2017 %>% 
-  filter(YEAR == "2017") %>% 
-  mutate(PROTECTED = case_when(
-    SITE == "IVEE" ~ "MPA",
-    SITE == "NAPL" ~ "MPA",
-    SITE == "AQUE" ~ "Non-MPA",
-    SITE == "CARP" ~ "Non-MPA",
-    SITE == "MOHK" ~ "Non-MPA")) %>% 
-  filter(SIZE > 82.6) %>% 
-  group_by(SITE) %>% 
-  summarize(
-    LEGAL_LOBSTARS = round(mean(SIZE),2) 
-  )
+sizes_17_summary <- abundance_tidy %>% 
+  filter(YEAR == 2017) %>%
+  mutate( Legality = ifelse(SIZE < 82.6, "Illegal", "Legal")) %>% 
+ select(SITE, Legality) %>%
+count(SITE, Legality) %>%
+ spread(Legality, n) %>%
+select(-SITE)
+
+
+rownames(sizes_17_summary) <- c("AQUE", "CARP", "IVEE", "MOHK", "NAPL")
+  
 
 sizes_17_summary
 
-sizes_17_table <- sizes_17_summary %>%
-  kable(align = "c", col.names = c("Site", "Percentage")) %>%
-  kable_styling(bootstrap_options = c("striped", "consensed"), full_width = F) %>%
-  add_header_above(c("Proportion of Legal Lobsters Across Sites in 2017" = 2))
+size_prop <- prop.table(as.matrix(sizes_17_summary), 1)
 
-sizes_17_table
+size_prop
+
+
+
 
 #chi-square test to compare the proportions across the five sites
-sizes_17_chi <- chisq.test(sizes_17_summary$LEGAL_LOBSTARS)
+sizes_17_chi <- chisq.test(sizes_17_summary)
 sizes_17_chi
 
 ##Hypothesis Test
 #H0: There is no signifigant asscociation between legal carapace size across the five sites.
 #HA: There is a signifigant asscociation between legal carapace size across the five sites. 
  
-#X^2 = 0.9995
+#X^2 = 0.0009
 
 
 
 ```
 
-Based on the LTER data of lobster carapace length in 2017 at the different sites (AQUE n = 67, IVEE n = 605, NAPL n = 111, CARP n = 704, MOHK n = 177), carapace length does not differ signifigantly across sites ($\chi^2$(`r sizes_17_chi$parameter`) *p* = `r round(sizes_17_chi$p.value,3)`, $\alpha$ = 0.05). 
+Based on the LTER data of lobster carapace length in 2017 at the different sites (AQUE n = 67, IVEE n = 605, NAPL n = 111, CARP n = 704, MOHK n = 177), carapace length does not differ signifigantly across sites ($\chi^2$(`r sizes_17_chi$parameter`) = (`r round(sizes_17_chi$statistic,3)`) *p* = `r round(sizes_17_chi$p.value,3)`, $\alpha$ = 0.05). 
