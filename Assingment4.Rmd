@@ -4,6 +4,7 @@ author: "Sidney Gerst"
 date: "November 13, 2018"
 output:
   html_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -168,7 +169,7 @@ Discuss trends in lobster abundance (counts) and fishing pressure (buoys):
 
 Part 2. Compare mean lobster sizes (by carapice length (mm)) by site in 2017.
 
-```{r}
+```{r, echo=FALSE, message=FALSE}
 
 # Convert abundance data frame into tidy format
 
@@ -186,9 +187,15 @@ View(sizes_2017)
 
 # Basic data exploration
 
+#Histograms of size and abundance in 2017 by site.
+
 size_hist <- ggplot(sizes_2017, aes(x = SIZE)) +
-  geom_histogram(bins = 10) +
+  geom_histogram(bins = 10, boundary = 0) + 
+  theme_classic() +
+  labs(y = "Frequency (n = 1668)", x = "Carapace Length (mm)") +
+  ggtitle("Lobster Lengths in 2017 at Santa Barbara Channel Sites - TH, EM, SG") +
   facet_wrap(~ SITE, scale = "free")
+
 
 size_hist
   
@@ -203,20 +210,30 @@ size_qq
 box_size <- ggplot(sizes_2017, aes(x = SITE, y = SIZE)) +
   geom_boxplot(width = .4, aes(color = SITE))
   
-
 box_size
 
-#Conduct a Levene's Test to see if equal variances, so that we can use an ANOVA.
+#Create summary and finalized summary table for mean lengths in 2017 (all 5 sites).
 
-variances <- sizes_2017 %>% 
+mean_comp <- sizes_2017 %>% 
   group_by(SITE) %>% 
   summarize(
-    mean = mean(SIZE),
-    sd = sd(SIZE),
-    variance = var(SIZE)
+    mean = round(mean(SIZE), digits = 2),
+    sd = round(sd(SIZE), digits = 2),
+    variance = round(var(SIZE), digits = 2),
+    max = round(max(SIZE), digits = 2),
+    min = round(min(SIZE), digits = 2)
   )
 
-variances
+mean_comp
+
+summarylength <- mean_comp %>% 
+  kable(col.names=c("Site", "Mean Length (mm)", "Standard Deviation", "Variance", "Maximum Length (mm)", "Minimum Length (mm)"), caption = "Table 3. The mean, maximum and minimum lengths of lobster carapices for LTER sites in the Santa Barbara Channel in 2017 - TH, EM, SG") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"),
+full_width = F)
+
+View(summarylength)
+
+#Conduct a Levene's Test to see if equal variances, so that we can use an ANOVA.
 
 levene_var <- leveneTest(SIZE ~ SITE, data = sizes_2017)
 levene_var
@@ -263,7 +280,7 @@ Part 3. Changes in lobster size at MPA and non-MPA sites (comparing only 2012 an
         - Null Hypothesis -- there is no significant difference in carapace length of lobsters in MPA          sites and non-MPA sites
         - Alternative Hypothesis -- there IS no significant difference in carapace length of lobsters          in MPA sites and non-MPA sites
       
-```{r}
+```{r, echo=FALSE, message=FALSE}
 
 ################################
 ### 1. EXPLORATORY DATA ANALYSIS
@@ -280,7 +297,7 @@ MPA_sites <- abundance_tidy %>%
       SITE == "AQUE" ~ "Non-MPA",
       SITE == "MOHK" ~ "Non-MPA",
       SITE == "CARP" ~ "Non-MPA")) %>% 
-  select(YEAR, SITE, SIZE, STATUS)
+  select(YEAR, SITE, SIZE, STATUS) 
 
 ## Create summary data table for MPA sites with mean, median, max, SD, sample size for SIZE at each site for 2012 and 2017  (IVEE, NAPL)
 MPA_size_table <- MPA_sites %>% 
@@ -511,18 +528,22 @@ Non_MPA_qq_year
   ## Null Hypothesis -- there is no significant difference in carapace length between 2012 and 2017
   ## Alternative Hypothesis -- there IS a significant difference in carapace length between 2012 and      2017
 
-MPA_sites_2012 <- MPA_sites %>% 
+MPA_sites_2012 <- MPA_sites %>% # Make a data frame that is just MPA sites in 2012
   filter(STATUS == "MPA") %>% 
   filter(YEAR == "2012")
 
-MPA_sites_2017 <- MPA_sites %>% 
+MPA_sites_2017 <- MPA_sites %>% # Make a data fram that is just MPA sites in 2017
   filter(STATUS == "MPA") %>% 
   filter(YEAR == "2017")
-
 
 MPA_ttest <- t.test(MPA_sites_2012$SIZE, MPA_sites_2017$SIZE)
 
 MPA_ttest ## p-value = 0.03603 -- below 0.05 so we will reject the null hypothesis and we conclude that there IS a significant difference in length between 2012 and 2017 at MPA sites. 
+
+# Calculate effect size for MPA sites in 2012 and 2017
+
+MPA_effect <- cohen.d(MPA_sites_2012$SIZE, MPA_sites_2017$SIZE)
+MPA_effect # effect size = -0.346 (small)
 
 #################
 
@@ -544,6 +565,8 @@ Non_MPA_ttest <- t.test(Non_MPA_sites_2012$SIZE, Non_MPA_sites_2017$SIZE)
 
 Non_MPA_ttest # p-value = 0.007228 -  again, below 0.05 so we will reject the null hypothesis and we conclude that there IS a significant differene in length between 2012 and 2017 at NON MPA sites.
 
+Non_MPA_effect <- cohen.d(Non_MPA_sites_2012$SIZE, Non_MPA_sites_2017$SIZE)
+Non_MPA_effect # effect size = 0.210 (small)
 
 ################
 
@@ -561,9 +584,6 @@ MPA_vs_NonMPA_2012 # p-vale = 0.002263 -- less than 0.05 so we reject the null a
 
 MPA_vs_NonMPA_2017 <- t.test(MPA_sites_2017$SIZE, Non_MPA_sites_2017$SIZE)
 MPA_vs_NonMPA_2017 # p-value = 0.8721 -- not less than 0.05 so we will RETAIN the null and conclude that there IS NOT a significant difference in carapace length between MPA and Non-MPA sites in 2017.
-
-
-
 
 
  
@@ -611,7 +631,7 @@ sizes_17_chi
 #H0: There is no signifigant asscociation between legal carapace size across the five sites.
 #HA: There is a signifigant asscociation between legal carapace size across the five sites. 
  
-#X^2 = 0.0009
+#X^2 = 0.0009 
 
 
 
