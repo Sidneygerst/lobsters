@@ -320,6 +320,7 @@ sizes_17_table <- sizes_17_summary %>%
 
 sizes_17_table
 
+#chi-square test to compare the proportions across the five sites
 sizes_17_chi <- chisq.test(sizes_17_summary$LEGAL_LOBSTARS)
 sizes_17_chi
 
