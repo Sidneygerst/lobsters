@@ -582,7 +582,7 @@ Steps for chi-square test:
   -Create table of proportions for carapace size in 2017 for the 5 sites
   -Chi-square test
 
-```{r}
+```{r echo = false}
 #table of proportions using the df: sizes_2017
 sizes_17 <- sizes_2017 %>% 
   filter( YEAR == "2017") %>% 
@@ -622,6 +622,14 @@ sizes_17_table
 sizes_17_chi <- chisq.test(sizes_17_summary$LEGAL_LOBSTARS)
 sizes_17_chi
 
+##Hypothesis Test
+#H0: There is no signifigant asscociation between legal carapace size across the five sites.
+#HA: There is a signifigant asscociation between legal carapace size across the five sites. 
+ 
+#X^2 = 0.9995
+
+
 
 ```
 
+Based on the LTER data of lobster carapace length in 2017 at the different sites (AQUE n = 67, IVEE n = 605, NAPL n = 111, CARP n = 704, MOHK n = 177), carapace length does not differ signifigantly across sites ($\chi^2$(`r sizes_17_chi$parameter`) *p* = `r round(sizes_17_chi$p.value,3)`, $\alpha$ = 0.05). 
