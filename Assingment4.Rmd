@@ -187,3 +187,69 @@ size_means <- abundance_tidy %>%
 
 
 
+Part 3. Changes in lobster size at MPA and non-MPA sites (comparing only 2012 and 2017 sizes)
+  - Exploratory data analysis
+      - Summary data table with size means within MPA sites during 2012 and 2017
+      - Summary data table with size within non-MPA sites during 2012 and 2017
+  - Hypothesis test for size change in MPA sites during 2012 and 2017
+      - Null Hypothesis -- there is no significant difference in carapace length (2012 and 2017)
+      - Alternative Hypothesis -- there IS a significant difference in carapace length (2012 and             2017)
+  - Hypothesis test for size change in non-MPA sites during 2012 and 2017
+      - Null Hypothesis -- there is no significant difference in carapace length between 2012 and            2017
+      - Alternative Hypothesis -- there IS a significant difference in carapace length (2012-2017)
+  - Hypothesis test to compare carapace length between MPA sites and non-MPA sites during 2012 (and      separately 2017)
+      - Null Hypothesis -- there is no significant difference in carapace length of lobsters in MPA          sites and non-MPA sites
+      - Alternative Hypothesis -- there IS no significant difference in carapace length of lobsters          in MPA sites and non-MPA sites
+      
+```{r}
+
+### EXPLORATORY DATA ANALYSIS
+
+## Set up data frame that assigns MPA or non-MPA designation
+
+MPA_sites <- abundance_tidy %>% 
+  filter(YEAR == "2012" | YEAR == "2017") %>% 
+  mutate(
+    STATUS = case_when(
+      SITE == "IVEE" ~ "MPA", 
+      SITE == "NAPL" ~ "MPA",
+      SITE == "AQUE" ~ "Non-MPA",
+      SITE == "MOHK" ~ "Non-MPA",
+      SITE == "CARP" ~ "Non-MPA")) %>% 
+  select(YEAR, SITE, SIZE, STATUS)
+
+
+## Create summary data table for MPA sites with mean, median, max, SD, sample size for SIZE at each site for 2012 and 2017  (IVEE, NAPL)
+
+MPA_size_table <- MPA_sites %>% 
+  filter(STATUS == "MPA") %>% 
+  group_by(YEAR) %>% 
+  summarize(
+    mean_size = round(mean(SIZE), 2), 
+    median_size = round(median(SIZE), 2),
+    max_size = round(max(SIZE), 2),
+    sd_size = round(sd(SIZE), 2),
+    length(SIZE)
+  )
+
+MPA_size_table
+
+
+## Create summary data table for NON-MPA sites with mean, median, max, SD, sample size for SIZE at each site for 2012 and 2017 (AQUE, MOHK, CARP)
+Non_MPA_size_table <- MPA_sites %>% 
+  filter(STATUS == "Non-MPA") %>% 
+  group_by(YEAR) %>% 
+  summarize(
+    mean_size = round(mean(SIZE), 2), 
+    median_size = round(median(SIZE), 2),
+    max_size = round(max(SIZE), 2),
+    sd_size = round(sd(SIZE), 2),
+    length(SIZE)
+  )
+
+Non_MPA_size_table
+      
+
+ 
+```
+
