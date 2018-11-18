@@ -2,7 +2,9 @@
 title: "206 Assignment 4"
 author: "Sidney Gerst"
 date: "November 13, 2018"
-output: html_document
+output:
+  word_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -100,6 +102,11 @@ pressure <- pressure_clean %>%
 pressure
  
 pressure_col <- ggplot(pressure_clean, aes(x = YEAR, y = TRAPS))+
+  geom_col()+
+  facet_wrap(~SITE, scale = "free")
+
+pressure_col
+  
 ```
 
 
