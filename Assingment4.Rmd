@@ -23,6 +23,7 @@ library(ggrepel)
 library(effsize)
 library(vcdExtra)
 library(dplyr)
+library(car)
 
 lobster_pressure <- read_csv("lobster_traps.csv")
 
@@ -166,10 +167,8 @@ Discuss trends in lobster abundance (counts) and fishing pressure (buoys):
 
 
 
-Part 2. Compare mean lobster size by site in 2017
+Part 2. Compare mean lobster sizes (by carapice length (mm)) by site in 2017.
 
-- Convert to tidy format
-- Exploratory data analysis 
 ```{r}
 
 # Convert abundance data frame into tidy format
@@ -202,11 +201,52 @@ size_qq
 
 #We see the data is approximately normally distributed at every site in 2017.
 
-box_
+box_size <- ggplot(sizes_2017, aes(x = SITE, y = SIZE)) +
+  geom_boxplot(width = .4, aes(color = SITE))
+  
+
+box_size
+
+#Conduct a Levene's Test to see if equal variances, so that we can use an ANOVA.
+
+variances <- sizes_2017 %>% 
+  group_by(SITE) %>% 
+  summarize(
+    mean = mean(SIZE),
+    sd = sd(SIZE),
+    variance = var(SIZE)
+  )
+
+variances
+
+levene_var <- leveneTest(SIZE ~ SITE, data = sizes_2017)
+levene_var
+
+#H0:Variances are equal
+#HA: Variances are not equal
+
+#With such a small p-value, we choose to reject the null. There is a significant difference in variances between sites.
+
+
+#Conduct a one-way ANOVA.
+#H0: All means are equal
+#HA: At least two means are not equal
+
+size_anova <- aov(SIZE ~ SITE, data = sizes_2017)
+
+size_sum <- summary(size_anova)
+
+size_sum ##ANOVA result: weak significance (p=0.0085)
+
+#Tukey's post hoc test - Which means differ?
+
+size_tukey <- TukeyHSD(size_anova)
+size_tukey
+#Significant difference in mean lobster carapice sizes between NAPL-IVEE (p=0.0037)
 
 
 ```
-
+There was not a significant difference in the mean lengths of lobsters at the LTER sites in 2017, with the exception of Naples and Isla Vista, which had an absolute difference of 4.78mm. 
 
 
 Part 3. Changes in lobster size at MPA and non-MPA sites (comparing only 2012 and 2017 sizes)
