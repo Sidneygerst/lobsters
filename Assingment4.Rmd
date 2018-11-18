@@ -520,7 +520,7 @@ Steps for chi-square test:
   -Create table of proportions for carapace size in 2017 for the 5 sites
   -Chi-square test
 
-```{r}
+```{r echo = false}
 #table of proportions using the df: sizes_2017
 sizes_17 <- sizes_2017 %>% 
   filter( YEAR == "2017") %>% 
