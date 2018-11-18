@@ -180,8 +180,30 @@ abundance_tidy <- as.data.frame(size_clean) %>%
 abundance_tidy
 
 #Create data frame for our 5 locations in 2017, selecting size.
-size_means <- abundance_tidy %>% 
+sizes_2017 <- abundance_tidy %>% 
+  filter(YEAR == 2017,
+         SITE == "AQUE"|SITE == "NAPL"|SITE == "MOHK"|SITE == "IVEE"|SITE == "CARP",
+         SIZE != "-99999")
+View(sizes_2017)
+
+# Basic data exploration
+
+size_hist <- ggplot(sizes_2017, aes(x = SIZE)) +
+  geom_histogram(bins = 10) +
+  facet_wrap(~ SITE, scale = "free")
+
+size_hist
   
+size_qq <- ggplot(sizes_2017, aes(sample = SIZE)) +
+  geom_qq(bins = 10) +
+  facet_wrap(~ SITE, scale = "free")
+
+size_qq
+
+#We see the data is approximately normally distributed at every site in 2017.
+
+box_
+
 
 ```
 
