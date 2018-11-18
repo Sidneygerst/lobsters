@@ -2,7 +2,9 @@
 title: "206 Assignment 4"
 author: "Sidney Gerst"
 date: "November 13, 2018"
-output: html_document
+output:
+  word_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -135,6 +137,9 @@ pressure_col <- ggplot(pressure_clean, aes(x = YEAR, y = TRAPS))+
   facet_wrap(~SITE, scale = "free")
 
 pressure_col
+<<<<<<< HEAD
+  
+=======
 
 # Make line graph of total pressure within each site (2012-2017)
 pressure_line <- as.data.frame(pressure_clean) %>% 
@@ -149,6 +154,7 @@ pressure_line <- as.data.frame(pressure_clean) %>%
 
 pressure_line
 
+>>>>>>> 5f9e53d487d7916bbd5600b13ee8bca301c4a1ed
 ```
 
 
