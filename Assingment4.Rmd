@@ -3,8 +3,8 @@ title: "206 Assignment 4"
 author: "Sidney Gerst"
 date: "November 13, 2018"
 output:
-  word_document: default
   html_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -169,7 +169,7 @@ Discuss trends in lobster abundance (counts) and fishing pressure (buoys):
 
 Part 2. Compare mean lobster sizes (by carapice length (mm)) by site in 2017.
 
-```{r}
+```{r, echo=FALSE, message=FALSE}
 
 # Convert abundance data frame into tidy format
 
@@ -264,7 +264,7 @@ Part 3. Changes in lobster size at MPA and non-MPA sites (comparing only 2012 an
         - Null Hypothesis -- there is no significant difference in carapace length of lobsters in MPA          sites and non-MPA sites
         - Alternative Hypothesis -- there IS no significant difference in carapace length of lobsters          in MPA sites and non-MPA sites
       
-```{r}
+```{r, echo=FALSE, message=FALSE}
 
 ################################
 ### 1. EXPLORATORY DATA ANALYSIS
@@ -512,18 +512,22 @@ Non_MPA_qq_year
   ## Null Hypothesis -- there is no significant difference in carapace length between 2012 and 2017
   ## Alternative Hypothesis -- there IS a significant difference in carapace length between 2012 and      2017
 
-MPA_sites_2012 <- MPA_sites %>% 
+MPA_sites_2012 <- MPA_sites %>% # Make a data frame that is just MPA sites in 2012
   filter(STATUS == "MPA") %>% 
   filter(YEAR == "2012")
 
-MPA_sites_2017 <- MPA_sites %>% 
+MPA_sites_2017 <- MPA_sites %>% # Make a data fram that is just MPA sites in 2017
   filter(STATUS == "MPA") %>% 
   filter(YEAR == "2017")
-
 
 MPA_ttest <- t.test(MPA_sites_2012$SIZE, MPA_sites_2017$SIZE)
 
 MPA_ttest ## p-value = 0.03603 -- below 0.05 so we will reject the null hypothesis and we conclude that there IS a significant difference in length between 2012 and 2017 at MPA sites. 
+
+# Calculate effect size for MPA sites in 2012 and 2017
+
+MPA_effect <- cohen.d(MPA_sites_2012$SIZE, MPA_sites_2017$SIZE)
+MPA_effect # effect size = -0.346 (small)
 
 #################
 
@@ -545,6 +549,8 @@ Non_MPA_ttest <- t.test(Non_MPA_sites_2012$SIZE, Non_MPA_sites_2017$SIZE)
 
 Non_MPA_ttest # p-value = 0.007228 -  again, below 0.05 so we will reject the null hypothesis and we conclude that there IS a significant differene in length between 2012 and 2017 at NON MPA sites.
 
+Non_MPA_effect <- cohen.d(Non_MPA_sites_2012$SIZE, Non_MPA_sites_2017$SIZE)
+Non_MPA_effect # effect size = 0.210 (small)
 
 ################
 
@@ -562,9 +568,6 @@ MPA_vs_NonMPA_2012 # p-vale = 0.002263 -- less than 0.05 so we reject the null a
 
 MPA_vs_NonMPA_2017 <- t.test(MPA_sites_2017$SIZE, Non_MPA_sites_2017$SIZE)
 MPA_vs_NonMPA_2017 # p-value = 0.8721 -- not less than 0.05 so we will RETAIN the null and conclude that there IS NOT a significant difference in carapace length between MPA and Non-MPA sites in 2017.
-
-
-
 
 
  
