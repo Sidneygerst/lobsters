@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Load Packages and read in files
 
-```{r}
+```{r, echo=FALSE, message=FALSE}
 library(tidyverse)
 library(pwr)
 library(knitr)
@@ -32,7 +32,7 @@ lobster_size <- read_csv("lobster_size_abundance.csv")
 
 Clean up Data before converting to tidy
 
-```{r}
+```{r, echo=FALSE, message=FALSE}
 size_clean <- lobster_size %>%
   select(YEAR, SITE, SIZE, COUNT) %>%
   filter(COUNT != "0")
@@ -58,8 +58,7 @@ Part 1: Lobster abundance and fishing pressure
     - Finalized line graphs for abundance and pressure 
     
     
-
-```{r}
+```{r, echo=FALSE, message=FALSE}
 
 # Make scatter plot for MEAN annual abundance by site (2012-2017)
 abundance <- size_clean %>% 
@@ -72,7 +71,9 @@ abundance <- size_clean %>%
   geom_point() +
   facet_wrap(~SITE, scale = "free") +
   xlab("Year") +
-  ylab("Total Count")
+  ylab("Mean Count")+
+  theme_classic()
+  
 
 abundance
 
@@ -80,7 +81,8 @@ abundance
 # Make column graph of total abundance by site (2012-2017)
 abundance_col <- ggplot(size_clean, aes(x = YEAR, y = COUNT))+
   geom_col()+
-  facet_wrap(~SITE, scale = "free")
+  facet_wrap(~SITE, scale = "free")+
+  theme_classic()
 
 abundance_col
 
@@ -93,10 +95,12 @@ abundance_line <- as.data.frame(size_clean) %>%
   geom_line(aes(color=SITE)) +
   xlab("Year") +
   ylab("Total Count")+
-  ggtitle("Lobster Abundance at Long-Term Ecological Research Sites in the Santa Barbara Channel")+
+  ggtitle("Lobster Abundance at LTER Sites in the Santa Barbara Channel")+
   theme_classic()
 
 abundance_line
+
+# Make finalized data summary table for lobseter abundance (2012-2017) 
 
 
 
@@ -104,7 +108,7 @@ abundance_line
 
 
 
-```{r}
+```{r, echo=FALSE, message=FALSE}
 
 # Make a scatter plot for MEAN annual lobster pressure for each site (2012-2017)
 pressure <- pressure_clean %>% 
@@ -118,7 +122,7 @@ pressure <- pressure_clean %>%
   geom_point() +
   facet_wrap(~SITE, scale = "free") +
   xlab("Year") +
-  ylab("Total Traps")+
+  ylab("Mean Pressure")+
   ggtitle("Lobster Abundance between 2012 and 2017")+
   theme_classic()
 
@@ -140,7 +144,7 @@ pressure_line <- as.data.frame(pressure_clean) %>%
   geom_line(aes(color=SITE)) +
   xlab("Year") +
   ylab("Total Pressure")+
-  ggtitle("Lobster Pressure at Long-Term Ecological Research Sites in Santa Barbara Channel")+
+  ggtitle("Lobster Pressure at LTER Sites in Santa Barbara Channel")+
   theme_classic()
 
 pressure_line
@@ -165,4 +169,6 @@ pressure_tidy <- as.data.frame(pressure_clean) %>%
   expand.dft(freq="TRAPS") 
 
 ```
+
+
 
