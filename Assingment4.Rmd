@@ -2,16 +2,14 @@
 title: "206 Assignment 4"
 author: "Sidney Gerst"
 date: "November 13, 2018"
-output:
-  html_document: default
-  word_document: default
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Load Packages and read in files
+Load Packages and read in files. 
 
 ```{r, echo=FALSE, message=FALSE}
 library(tidyverse)
@@ -24,6 +22,7 @@ library(effsize)
 library(vcdExtra)
 library(dplyr)
 library(car)
+library(magrittr)
 
 lobster_pressure <- read_csv("lobster_traps.csv")
 
@@ -167,7 +166,7 @@ Discuss trends in lobster abundance (counts) and fishing pressure (buoys):
 
 
 
-Part 2. Compare mean lobster sizes (by carapice length (mm)) by site in 2017.
+Part 2. Compare mean lobster sizes (by carapace length (mm)) by site in 2017.
 
 ```{r, echo=FALSE, message=FALSE}
 
@@ -227,11 +226,11 @@ mean_comp <- sizes_2017 %>%
 mean_comp
 
 summarylength <- mean_comp %>% 
-  kable(col.names=c("Site", "Mean Length (mm)", "Standard Deviation", "Variance", "Maximum Length (mm)", "Minimum Length (mm)"), caption = "Table 3. The mean, maximum and minimum lengths of lobster carapices for LTER sites in the Santa Barbara Channel in 2017 - TH, EM, SG") %>% 
+  kable(col.names=c("Site", "Mean Length (mm)", "Standard Deviation", "Variance", "Maximum Length (mm)", "Minimum Length (mm)"), caption = "Table 3. The mean, maximum and minimum lengths of lobster carapaces for LTER sites in the Santa Barbara Channel in 2017 - TH, EM, SG") %>% 
   kable_styling(bootstrap_options = c("striped", "hover"),
 full_width = F)
 
-View(summarylength)
+summarylength
 
 #Conduct a Levene's Test to see if equal variances, so that we can use an ANOVA.
 
@@ -258,7 +257,7 @@ size_sum ##ANOVA result: weak significance (p=0.0085)
 
 size_tukey <- TukeyHSD(size_anova)
 size_tukey
-#Significant difference in mean lobster carapice sizes between NAPL-IVEE (p=0.0037)
+#Significant difference in mean lobster carapace sizes between NAPL-IVEE (p=0.0037)
 
 
 ```
