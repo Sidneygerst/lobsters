@@ -604,7 +604,7 @@ Steps for chi-square test:
 
 sizes_17_summary <- abundance_tidy %>% 
   filter(YEAR == 2017) %>%
-  mutate( Legality = ifelse(SIZE < 82.6, "Illegal", "Legal")) %>% 
+  mutate(Legality = ifelse(SIZE < 82.6, "Illegal", "Legal")) %>% 
  select(SITE, Legality) %>%
 count(SITE, Legality) %>%
  spread(Legality, n) %>%
@@ -620,8 +620,11 @@ size_prop <- prop.table(as.matrix(sizes_17_summary), 1)
 
 size_prop
 
+size_table <- kable(size_prop)%>%
+  kable_styling(bootstrap_option = c("striped", "hover"), full_width = FALSE) %>%
+  add_header_above(c(" " = 1, "Legality" = 2))
 
-
+size_table
 
 #chi-square test to compare the proportions across the five sites
 sizes_17_chi <- chisq.test(sizes_17_summary)
