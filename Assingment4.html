@@ -4964,19 +4964,19 @@ NAPL
 <p>Steps for chi-square test: -Create table of proportions for carapace size in 2017 for the 5 sites -Chi-square test</p>
 <pre><code>## Warning: Setting row names on a tibble is deprecated.</code></pre>
 <pre><code>## # A tibble: 5 x 2
-##   Illegal Legal
-## *   &lt;int&gt; &lt;int&gt;
-## 1      51    16
-## 2     526   179
-## 3     476   130
-## 4     154    24
-## 5      75    37</code></pre>
-<pre><code>##        Illegal     Legal
-## AQUE 0.7611940 0.2388060
-## CARP 0.7460993 0.2539007
-## IVEE 0.7854785 0.2145215
-## MOHK 0.8651685 0.1348315
-## NAPL 0.6696429 0.3303571</code></pre>
+##   `Illegal (&lt;82.6 mm)` `Legal (&gt;82.6 mm)`
+## *                &lt;int&gt;              &lt;int&gt;
+## 1                   51                 16
+## 2                  526                179
+## 3                  476                130
+## 4                  154                 24
+## 5                   75                 37</code></pre>
+<pre><code>##      Illegal (&lt;82.6 mm) Legal (&gt;82.6 mm)
+## AQUE               0.76             0.24
+## CARP               0.75             0.25
+## IVEE               0.79             0.21
+## MOHK               0.87             0.13
+## NAPL               0.67             0.33</code></pre>
 <table class="table table-striped table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -4984,7 +4984,7 @@ NAPL
 </th>
 <th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
 <div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">
-Legality
+Proportion of Legal or Illegal Lobster Carapace Sizes Found in 2017
 </div>
 </th>
 </tr>
@@ -4992,10 +4992,10 @@ Legality
 <th style="text-align:left;">
 </th>
 <th style="text-align:right;">
-Illegal
+Illegal (&lt;82.6 mm)
 </th>
 <th style="text-align:right;">
-Legal
+Legal (&gt;82.6 mm)
 </th>
 </tr>
 </thead>
@@ -5005,10 +5005,10 @@ Legal
 AQUE
 </td>
 <td style="text-align:right;">
-0.7611940
+0.76
 </td>
 <td style="text-align:right;">
-0.2388060
+0.24
 </td>
 </tr>
 <tr>
@@ -5016,10 +5016,10 @@ AQUE
 CARP
 </td>
 <td style="text-align:right;">
-0.7460993
+0.75
 </td>
 <td style="text-align:right;">
-0.2539007
+0.25
 </td>
 </tr>
 <tr>
@@ -5027,10 +5027,10 @@ CARP
 IVEE
 </td>
 <td style="text-align:right;">
-0.7854785
+0.79
 </td>
 <td style="text-align:right;">
-0.2145215
+0.21
 </td>
 </tr>
 <tr>
@@ -5038,10 +5038,10 @@ IVEE
 MOHK
 </td>
 <td style="text-align:right;">
-0.8651685
+0.87
 </td>
 <td style="text-align:right;">
-0.1348315
+0.13
 </td>
 </tr>
 <tr>
@@ -5049,10 +5049,10 @@ MOHK
 NAPL
 </td>
 <td style="text-align:right;">
-0.6696429
+0.67
 </td>
 <td style="text-align:right;">
-0.3303571
+0.33
 </td>
 </tr>
 </tbody>

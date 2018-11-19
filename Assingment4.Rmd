@@ -603,7 +603,7 @@ Steps for chi-square test:
 
 sizes_17_summary <- abundance_tidy %>% 
   filter(YEAR == 2017) %>%
-  mutate(Legality = ifelse(SIZE < 82.6, "Illegal", "Legal")) %>% 
+  mutate(Legality = ifelse(SIZE < 82.6, "Illegal (<82.6 mm)", "Legal (>82.6 mm)")) %>% 
  select(SITE, Legality) %>%
 count(SITE, Legality) %>%
  spread(Legality, n) %>%
@@ -615,13 +615,13 @@ rownames(sizes_17_summary) <- c("AQUE", "CARP", "IVEE", "MOHK", "NAPL")
 
 sizes_17_summary
 
-size_prop <- prop.table(as.matrix(sizes_17_summary), 1)
+size_prop <- round(prop.table(as.matrix(sizes_17_summary), 1),2)
 
 size_prop
 
 size_table <- kable(size_prop)%>%
-  kable_styling(bootstrap_option = c("striped", "hover"), full_width = FALSE) %>%
-  add_header_above(c(" " = 1, "Legality" = 2))
+  kable_styling(bootstrap_option = c("striped", "hover", "bordered"), full_width = FALSE, font_size = 10) %>%
+  add_header_above(c(" " = 1, "Proportion of Legal or Illegal Lobster Carapace Sizes Found in 2017" = 2))
 
 size_table
 
@@ -640,3 +640,7 @@ sizes_17_chi
 ```
 
 Based on the LTER data of lobster carapace length in 2017 at the different sites (AQUE n = 67, IVEE n = 605, NAPL n = 111, CARP n = 704, MOHK n = 177), carapace length does not differ signifigantly across sites ($\chi^2$(`r sizes_17_chi$parameter`) = (`r round(sizes_17_chi$statistic,3)`) *p* = `r round(sizes_17_chi$p.value,3)`, $\alpha$ = 0.05). 
+
+
+
+
